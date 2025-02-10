@@ -15,6 +15,7 @@ app.use(express.json())
 const cors = require('cors')
 const AddressModel = require('./model/address.model')
 const WishlistModel = require('./model/wishlist.model')
+const OrderModel = require('./model/order.model')
 const corsOptions = {
   origin: "*",
   credentials: true,
@@ -632,6 +633,75 @@ app.post('/api/users/cart/update', jwtAuth, async (req,res) => {
     res.status(500).json({ error: 'failed to Update cart Item' });
   }
 })
+
+
+// ************ Order ***********
+
+//add order
+
+app.post('/api/order', jwtAuth, async (req, res) => {
+  const orderDetails = req.body
+  const { id } = req.user
+  try { 
+
+  const newOrder = new OrderModel({user:id,...orderDetails})
+    const savedOrder = await newOrder.save()
+
+    if (!savedOrder)
+    {
+     return res.status(500).json({error:"error in saving Order"})
+    }
+
+    res.status(201).json(savedOrder)
+    
+  }
+  catch (error)
+  {
+res.status(500).json({error:"Failed to add Order"})
+  }
+ 
+})
+
+//get order
+
+app.get('/api/order/get', jwtAuth, async (req, res) => {
+  const {id} = req.user
+  try {
+    const allOrders = await OrderModel.find({ user: id })
+      .populate('user', 'firstname email mobilenumber')
+      .populate('address')
+      .populate('cloths.clothsId','title imgUrl price discount')
+    if (!allOrders)
+    {
+      return res.status(500).json({error:'error in fetching order'})
+    }
+    res.status(200).json(allOrders)
+  }
+  catch (error)
+  {
+res.status(500).json({error:'failed to fetching order'})
+  }
+})
+
+//cancel order
+
+app.delete('/api/order/delete/:orderId', jwtAuth,async (req,res) => {
+  const orderId = req.params.orderId
+  try {
+    const canceledOrder = await OrderModel.findByIdAndDelete(orderId)
+    if (!canceledOrder)
+    {
+      return res.status(500).json({error:'error in cancel order'})
+    }
+
+    res.status(200).json(canceledOrder)
+  }
+  catch (error)
+  {
+    res.status(500).json({error:'failed to cancel order'})
+  }
+})
+
 
 
 // Catch unmatched routes
