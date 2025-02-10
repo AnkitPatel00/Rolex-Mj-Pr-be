@@ -635,6 +635,28 @@ app.post('/api/users/cart/update', jwtAuth, async (req,res) => {
 })
 
 
+//delete all cart items
+
+app.delete('/api/users/cart/remove/all',async (req,res) => {
+  try {
+    const deletedCartItem = await CartModel.deleteMany()
+
+    if (!deletedCartItem)
+    {
+      return res.status(500).json({error:'error in deleting all cart items'})
+    }
+
+    res.status(200).json({message:"cart item deleted successfully"})
+
+  }
+  catch (error)
+  {
+res.status(500).json({error:"failed to delete all cart items"})
+  }
+})
+
+
+
 // ************ Order ***********
 
 //add order
