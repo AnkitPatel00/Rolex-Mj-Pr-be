@@ -10,7 +10,8 @@ const addressSchema = new mongoose.Schema({
     city: { type: String, required: true },
     state: { type: String, required: true },
     country: { type: String, required: true },
-    pincode: { type: Number, required: true }, 
+  pincode: { type: Number, required: true }, 
+    phoneNumber:{type: Number, required: true},
     setasDefault: { type: Boolean, default: false }
 });
 
