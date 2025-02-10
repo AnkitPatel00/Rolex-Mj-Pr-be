@@ -28,10 +28,7 @@ app.get('/', (req,res) => {
     res.send("Hello Clothing Server")  
 })
 
-// Catch unmatched routes
-app.use((req, res, next) => {
-  res.status(404).json({ error: 'Api Route not found' });
-});
+
 
 
 // ************ JWT Middleware ***********
@@ -636,6 +633,11 @@ app.post('/api/users/cart/update', jwtAuth, async (req,res) => {
   }
 })
 
+
+// Catch unmatched routes
+app.use((req, res, next) => {
+  res.status(404).json({ error: 'Api Route not found' });
+});
 
 const PORT =process.env.PORT || 3000
 app.listen(PORT, () => {
