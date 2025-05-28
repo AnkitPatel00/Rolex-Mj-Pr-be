@@ -300,12 +300,12 @@ app.post('/api/users/profile/address/add',jwtAuth,async (req, res) => {
   const address = req.body
   try {
 
-    const addressLimit = await AddressModel.find()
+//     const addressLimit = await AddressModel.find()
     
-    if (addressLimit.length >= 5)
-    {
- return res.status(409).json({ message: 'Address limit reached. You can only have up to 5 addresses.' });
-    }
+//     if (addressLimit.length >= 5)
+//     {
+//  return res.status(409).json({ message: 'Address limit reached. You can only have up to 5 addresses.' });
+//     }
 
     const newAddress = new AddressModel(address)
     const savedAddress = await newAddress.save()
